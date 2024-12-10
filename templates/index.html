@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Task Manager</h1>
+
+        <!-- タスク追加フォーム -->
+        <form action="/add" method="post" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="name" class="form-control" placeholder="Task Name" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="deadline" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="department" class="form-control" placeholder="Department" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="assignee" class="form-control" placeholder="Assignee" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="progress" class="form-control" placeholder="Progress (%)" min="0" max="100" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Add</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- タスク一覧表示 -->
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Task Name</th>
+                    <th>Deadline</th>
+                    <th>Department</th>
+                    <th>Assignee</th>
+                    <th>Progress</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.deadline.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ task.department }}</td>
+                    <td>{{ task.assignee }}</td>
+                    <td>
+                        <form action="/update/{{ task.id }}" method="post" class="d-inline">
+                            <input type="number" name="progress" class="form-control form-control-sm d-inline" value="{{ task.progress }}" min="0" max="100" style="width: 80px;">
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <!-- 将来的に削除ボタンを追加 -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
