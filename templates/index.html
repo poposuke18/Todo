@@ -31,6 +31,15 @@
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary w-100">Add</button>
                 </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-control" required>
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                
+s                
             </div>
         </form>
 
@@ -43,24 +52,21 @@
                     <th>Department</th>
                     <th>Assignee</th>
                     <th>Progress</th>
+                    <th>Status</th> <!-- ステータス列 -->
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for task in tasks %}
-                <tr>
+                <tr class="{% if task.deadline < now %}table-danger{% elif (task.deadline - now).days <= 3 %}table-warning{% endif %}">
                     <td>{{ task.name }}</td>
                     <td>{{ task.deadline.strftime('%Y-%m-%d') }}</td>
                     <td>{{ task.department }}</td>
                     <td>{{ task.assignee }}</td>
+                    <td>{{ task.progress }}%</td>
+                    <td>{{ task.status }}</td> <!-- ステータスを表示 -->
                     <td>
-                        <form action="/update/{{ task.id }}" method="post" class="d-inline">
-                            <input type="number" name="progress" class="form-control form-control-sm d-inline" value="{{ task.progress }}" min="0" max="100" style="width: 80px;">
-                            <button type="submit" class="btn btn-sm btn-success">Update</button>
-                        </form>
-                    </td>
-                    <td>
-                        <!-- 将来的に削除ボタンを追加 -->
+                        <a href="/edit/{{ task.id }}" class="btn btn-sm btn-warning">Edit</a>
                     </td>
                 </tr>
                 {% endfor %}
